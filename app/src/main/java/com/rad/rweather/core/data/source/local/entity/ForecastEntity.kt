@@ -24,6 +24,6 @@ data class ForecastEntity (
     @ColumnInfo(name = "message")
     val message: Double?,
 
-    @Embedded
+    @ColumnInfo(name = "list_forecast")
     val list: List<ListForecastEntity>?
 )

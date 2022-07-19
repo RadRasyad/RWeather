@@ -9,7 +9,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "city")
 data class CityEntity(
 
-    @PrimaryKey
     @ColumnInfo(name = "cityId")
     val cityId: Int,
 

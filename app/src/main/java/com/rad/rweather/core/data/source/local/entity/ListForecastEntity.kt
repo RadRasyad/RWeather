@@ -18,8 +18,8 @@ data class ListForecastEntity(
     @Embedded
     val main: MainWeatherEntity?,
 
-    @Embedded
-    val weather: Array<WeatherItemEntity>?,
+    @ColumnInfo(name = "weather_item")
+    val weather: List<WeatherItemEntity>?,
 
     @Embedded
     val clouds: CloudsEntity?,
