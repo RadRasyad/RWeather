@@ -8,22 +8,19 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "forecast_entity")
 data class ForecastEntity (
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Int,
-
     @Embedded
-    val city: CityEntity?,
+    var city: CityEntity?,
 
     @ColumnInfo(name = "cnt")
-    val cnt: Int?,
+    var cnt: Int?,
 
+    @PrimaryKey
     @ColumnInfo(name = "cod")
-    val cod: String?,
+    var cod: String?,
 
     @ColumnInfo(name = "message")
-    val message: Double?,
+    var message: Double?,
 
     @ColumnInfo(name = "list_forecast")
-    val list: List<ListForecastEntity>?
+    var list: List<ListForecastEntity>?
 )

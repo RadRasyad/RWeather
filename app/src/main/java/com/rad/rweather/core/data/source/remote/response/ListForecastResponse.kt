@@ -11,7 +11,7 @@ data class ListForecastResponse(
     val main: MainWeatherResponse?,
 
     @SerializedName("weather")
-    val weather: Array<WeatherItemResponse>?,
+    val weather: List<WeatherItemResponse>?,
 
     @SerializedName("clouds")
     val clouds: CloudsResponse?,

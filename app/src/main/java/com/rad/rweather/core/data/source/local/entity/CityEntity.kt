@@ -8,7 +8,7 @@ import androidx.room.Entity
 data class CityEntity(
 
     @ColumnInfo(name = "cityId")
-    val cityId: Int,
+    val cityId: Int?,
 
     @ColumnInfo(name = "name")
     val name: String?,

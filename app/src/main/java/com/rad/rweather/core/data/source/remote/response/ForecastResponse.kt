@@ -14,7 +14,7 @@ data class ForecastResponse (
     val cod: String?,
 
     @SerializedName("message")
-    val message: Double?,
+    var message: Double?,
 
     @SerializedName("list")
     val list: List<ListForecastResponse>?

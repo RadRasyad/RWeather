@@ -5,7 +5,7 @@ data class ListForecast(
 
     val date: Long?,
     val main: MainWeather?,
-    val weather: Array<WeatherItem>?,
+    val weather: List<WeatherItem>?,
     val clouds: Clouds?,
     val wind: Wind?,
     val visibility: Int?,

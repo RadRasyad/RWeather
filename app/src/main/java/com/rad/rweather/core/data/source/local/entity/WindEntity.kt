@@ -7,7 +7,7 @@ import androidx.room.Entity
 data class WindEntity (
 
     @ColumnInfo(name = "speed")
-    val speed: Double,
+    val speed: Double?,
 
     @ColumnInfo(name = "deg")
     val deg: Int?,

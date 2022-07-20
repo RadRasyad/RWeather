@@ -8,9 +8,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "list_forecast_entity")
 data class ListForecastEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id_forecast")
-    var id: Int,
 
     @ColumnInfo(name = "date")
     val date: Long?,
@@ -39,6 +36,7 @@ data class ListForecastEntity(
     @Embedded
     val sys: SysEntity?,
 
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "datetext")
     val dateText: String?,
 )
