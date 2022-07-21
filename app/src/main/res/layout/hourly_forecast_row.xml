@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tv_day"
+        android:id="@+id/tv_hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hour"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnimationView"
+        android:id="@+id/lav_weather"
         android:layout_width="40dp"
         android:layout_height="40dp"
         app:layout_constraintEnd_toEndOf="@+id/tv_day"
@@ -27,12 +27,13 @@
         app:lottie_rawRes="@raw/weather_sunny" />
 
     <TextView
+        android:id="@+id/tv_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="31 °C"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
-        app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
-        app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView" />
+        app:layout_constraintEnd_toEndOf="@+id/lav_weather"
+        app:layout_constraintStart_toStartOf="@+id/lav_weather"
+        app:layout_constraintTop_toBottomOf="@+id/lav_weather" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

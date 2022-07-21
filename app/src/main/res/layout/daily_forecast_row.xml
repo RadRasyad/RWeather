@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnimationView"
+        android:id="@+id/lav_weather"
         android:layout_width="40dp"
         android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_day"
@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="@+id/tv_day"
         app:lottie_autoPlay="false"
         app:lottie_loop="false"
-        app:lottie_rawRes="@raw/weather_sunny" />
+        app:lottie_rawRes="@raw/error" />
 
     <TextView
         android:id="@+id/tv_minTemp"

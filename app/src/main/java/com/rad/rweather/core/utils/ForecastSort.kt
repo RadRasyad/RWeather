@@ -2,9 +2,9 @@ package com.rad.rweather.core.utils
 
 import com.rad.rweather.core.domain.model.ListForecast
 
-class ForecastSort {
+object ForecastSort {
 
-    fun sortPerDays(listForecast: List<ListForecast>): List<ListForecast> {
+    fun sortDaily(listForecast: List<ListForecast>): List<ListForecast> {
 
         val days = arrayListOf<String>()
         val mappedForecast = arrayListOf<ListForecast>()
@@ -31,15 +31,10 @@ class ForecastSort {
             .distinctBy { it.dateText?.substringBefore(" ") }.toList()
     }
 
-    fun sortBySameDay(listForecast: List<ListForecast>): List<ListForecast> {
-
-        val currentDay = listForecast[0].dateText?.substringBefore(" ")
-        println(currentDay)
+    fun sortHourly(listForecast: List<ListForecast>): List<ListForecast> {
 
         return listForecast
-            .filter {
-                it.dateText?.substringBefore(" ") == currentDay
-            }
+            .subList(0,8)
     }
 
 
