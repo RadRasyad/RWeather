@@ -10,7 +10,7 @@ object MapperResponseToEntity {
         return ForecastEntity(
 
             city = data.city?.let { mapCityResponseToEntity(it) },
-            cod = data.cod,
+            cod = data.cod!!,
             cnt = data.cnt,
             message = data.message,
             list = data.list?.let { mapListForecastResponseToListForecastEntity(it) }

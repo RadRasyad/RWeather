@@ -15,11 +15,10 @@ object MapperEntityToDomain {
             cnt = data.cnt,
             message = data.message,
             list = data.list?.let { mapListForecastEntityToListForecast(it) }
-
         )
     }
 
-    fun mapCityEntityToCity(data: CityEntity): City {
+    private fun mapCityEntityToCity(data: CityEntity): City {
 
         return City(
 
@@ -35,7 +34,7 @@ object MapperEntityToDomain {
         )
     }
 
-    fun mapCoordEntityToCoord(data: CoordEntity): Coord {
+    private fun mapCoordEntityToCoord(data: CoordEntity): Coord {
 
         return Coord(
             lat = data.lat,
@@ -43,7 +42,7 @@ object MapperEntityToDomain {
         )
     }
 
-    fun mapListForecastEntityToListForecast(data: List<ListForecastEntity>): List<ListForecast> {
+    private fun mapListForecastEntityToListForecast(data: List<ListForecastEntity>): List<ListForecast> {
 
         val forecastList = ArrayList<ListForecast>()
         data.map {
@@ -64,7 +63,7 @@ object MapperEntityToDomain {
         return forecastList
     }
 
-    fun mapMainEntityToMain(data: MainWeatherEntity): MainWeather {
+    private fun mapMainEntityToMain(data: MainWeatherEntity): MainWeather {
 
         return MainWeather(
             temp = data.temp,
@@ -79,7 +78,7 @@ object MapperEntityToDomain {
         )
     }
 
-    fun mapWeatherItemEntityToWeatherItem(data: List<WeatherItemEntity>): List<WeatherItem> {
+    private fun mapWeatherItemEntityToWeatherItem(data: List<WeatherItemEntity>): List<WeatherItem> {
 
         val weatherItem = ArrayList<WeatherItem>()
 
@@ -95,14 +94,14 @@ object MapperEntityToDomain {
         return weatherItem
     }
 
-    fun mapCloundEntityToCloud(data: CloudsEntity): Clouds {
+    private fun mapCloundEntityToCloud(data: CloudsEntity): Clouds {
 
         return Clouds(
             all = data.all
         )
     }
 
-    fun mapWindEntityToWind(data: WindEntity): Wind {
+    private fun mapWindEntityToWind(data: WindEntity): Wind {
         return Wind(
             speed = data.speed,
             deg = data.deg,
@@ -110,13 +109,13 @@ object MapperEntityToDomain {
         )
     }
 
-    fun mapRainEntityToRain(data: RainEntity): Rain {
+    private fun mapRainEntityToRain(data: RainEntity): Rain {
         return Rain(
             r3h = data.r3h
         )
     }
 
-    fun mapSysEntityToSys(data: SysEntity): Sys {
+    private fun mapSysEntityToSys(data: SysEntity): Sys {
         return Sys(
             pod = data.pod
         )

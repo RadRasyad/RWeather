@@ -1,5 +1,7 @@
 package com.rad.rweather.core.data.source.local
 
+import androidx.lifecycle.LiveData
+import com.rad.rweather.core.data.source.local.entity.ForecastEntity
 import com.rad.rweather.core.data.source.local.room.ForecastDao
 
 class LocalDataSource private constructor(private val forecastDao: ForecastDao) {
@@ -12,4 +14,8 @@ class LocalDataSource private constructor(private val forecastDao: ForecastDao) 
                 instance ?: LocalDataSource(forecastDao)
             }
     }
+
+    fun getForecast(): LiveData<ForecastEntity> = forecastDao.getForecast()
+
+    fun insertForecast(forecast: ForecastEntity) = forecastDao.insertForecast(forecast)
 }

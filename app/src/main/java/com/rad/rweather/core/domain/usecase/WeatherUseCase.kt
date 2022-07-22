@@ -9,7 +9,4 @@ interface WeatherUseCase {
 
     fun getForecast(lat: Double, lon: Double): LiveData<Resource<Forecast>>
 
-    fun getHourlyForecast(): LiveData<Resource<List<ListForecast>>>
-
-    fun getDailyForecast(): LiveData<Resource<List<ListForecast>>>
 }

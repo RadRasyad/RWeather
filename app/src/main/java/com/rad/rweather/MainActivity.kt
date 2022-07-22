@@ -2,19 +2,23 @@ package com.rad.rweather
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.rad.rweather.core.data.source.remote.network.ApiClient
-import com.rad.rweather.databinding.ActivityMainBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.rad.rweather.core.data.Resource
+import com.rad.rweather.core.data.source.remote.network.ApiResponse
 import com.rad.rweather.core.data.source.remote.response.ForecastResponse
-import com.rad.rweather.core.data.source.remote.network.ApiConfig
+import com.rad.rweather.core.domain.model.Forecast
+import com.rad.rweather.core.domain.model.ListForecast
+import com.rad.rweather.core.ui.HourlyAdapter
+import com.rad.rweather.databinding.ActivityMainBinding
 import com.rad.rweather.core.ui.ViewModelFactory
+import com.rad.rweather.core.utils.DateFormatter
+import com.rad.rweather.core.utils.getLottieSrc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,37 +30,56 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //getHourlyForecast()
+        val hourlyAdapter = HourlyAdapter()
+
         val factory = ViewModelFactory.getInstance(this)
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
-        mainViewModel.forecast(-6.966667, 110.416664)
-    }
 
+        mainViewModel.forecast(-6.966667, 110.416664).observe(this) { forecast ->
+            if (forecast != null) {
+                when (forecast) {
+                    is Resource.Loading -> {
+                        binding.constraint.visibility = View.GONE
+                    }
 
-    private val appID: String
-        get() = BuildConfig.API_KEY
+                    is Resource.Success -> {
+                        binding.constraint.visibility = View.VISIBLE
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            forecast.data?.let { setCurrentForecast(it) }
+                            //hourlyAdapter.setData(forecast.data?.list)
+                        }
+                    }
 
-    /*
-    fun getHourlyForecast() {
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            ApiClient.getForecast(-6.966667, 110.416664, appID).enqueue(object :
-                Callback<ForecastResponse> {
-                override fun onResponse(
-                    call: Call<ForecastResponse>,
-                    response: Response<ForecastResponse>
-                ) {
-                    Log.d("Response Success", response.body()?.cnt.toString())
+                    is Resource.Error -> {
+                        binding.constraint.visibility = View.GONE
+                    }
                 }
+            }
 
-                override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
-                    Log.d("Response Failed", t.message.toString())
-                }
+        }
 
-            })
+        with(binding.rvHourly) {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = hourlyAdapter
         }
     }
 
-     */
+
+    private fun setCurrentForecast(forecast: Forecast) {
+        binding.apply {
+            val currentForecast = forecast.list?.get(0)
+
+            tvCity.text = forecast.city?.name
+            tvTemp.text = currentForecast?.main?.temp.toString()+"°"
+
+            val date = currentForecast?.dateText
+            tvDate.text = date?.let { DateFormatter.getDayNHour(it) }
+
+            val img = currentForecast?.weather?.get(0)?.icon
+            lavWeather.setAnimation(getLottieSrc(img!!))
+        }
+    }
+
 
 }

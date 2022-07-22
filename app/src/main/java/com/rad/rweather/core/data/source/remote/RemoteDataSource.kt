@@ -2,6 +2,7 @@ package com.rad.rweather.core.data.source.remote
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.rad.rweather.BuildConfig
 import com.rad.rweather.core.data.source.remote.network.ApiClient
 import com.rad.rweather.core.data.source.remote.response.ForecastResponse
@@ -26,7 +27,8 @@ class RemoteDataSource private constructor(private val service: ApiClient) {
     private val appID: String
         get() = BuildConfig.API_KEY
 
-    fun getForecast(lat: Double, lon: Double) {
+    fun getForecast(lat: Double, lon: Double): LiveData<ApiResponse<ForecastResponse>> {
+        val resultData = MutableLiveData<ApiResponse<ForecastResponse>>()
 
         service.getForecast(lat, lon, appID).enqueue(object :
             Callback<ForecastResponse> {
@@ -34,14 +36,17 @@ class RemoteDataSource private constructor(private val service: ApiClient) {
                 call: Call<ForecastResponse>,
                 response: Response<ForecastResponse>
             ) {
-                Log.d("Response Success", response.body().toString())
+                val data = response.body()
+                resultData.value = if (data!=null) ApiResponse.Success(data) else ApiResponse.Empty
             }
 
             override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
+                resultData.value = ApiResponse.Error(t.message.toString())
                 Log.d("Response Failed", t.message.toString())
             }
 
         })
 
+        return resultData
     }
 }

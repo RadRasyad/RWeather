@@ -16,7 +16,7 @@ data class ForecastEntity (
 
     @PrimaryKey
     @ColumnInfo(name = "cod")
-    var cod: String?,
+    var cod: String,
 
     @ColumnInfo(name = "message")
     var message: Double?,

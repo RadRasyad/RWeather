@@ -7,9 +7,5 @@ import com.rad.rweather.core.domain.model.ListForecast
 
 interface IWeatherRepository {
 
-    fun getHourlyForecast(): LiveData<Resource<List<ListForecast>>>
-
-    fun getDailyForecast(): LiveData<Resource<List<ListForecast>>>
-
     fun getForecast(lat: Double, lon: Double): LiveData<Resource<Forecast>>
 }

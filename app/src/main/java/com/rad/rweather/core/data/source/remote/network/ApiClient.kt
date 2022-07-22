@@ -13,4 +13,5 @@ interface ApiClient {
         @Query("lon") lon: Double,
         @Query("appid") appId: String
     ): Call<ForecastResponse>
+
 }
