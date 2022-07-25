@@ -65,7 +65,7 @@
                     android:layout_height="160dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:lottie_rawRes="@raw/weather_sunny"
+                    app:lottie_fileName="error.json"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true" />
 

@@ -11,7 +11,16 @@ interface ApiClient {
     fun getForecast(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
-        @Query("appid") appId: String
+        @Query("appid") appId: String,
+        @Query("units") units: String
+    ): Call<ForecastResponse>
+
+    @GET("weather")
+    fun getCurrentForecast(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") appId: String,
+        @Query("units") units: String
     ): Call<ForecastResponse>
 
 }

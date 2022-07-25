@@ -4,19 +4,20 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.squareup.moshi.Json
 
 @Entity(tableName = "weather_item_entity")
 data class WeatherItemEntity (
 
-    @ColumnInfo(name = "id_weather")
+    @Json(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name = "main_weather")
+    @Json(name = "main")
     val mainWeather: String?,
 
-    @ColumnInfo(name = "description")
+    @Json(name = "description_weather")
     val description: String?,
 
-    @ColumnInfo(name = "description")
+    @Json(name = "description")
     val icon: String?
 )

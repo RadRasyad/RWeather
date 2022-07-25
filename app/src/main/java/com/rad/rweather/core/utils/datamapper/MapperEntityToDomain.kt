@@ -1,35 +1,34 @@
 package com.rad.rweather.core.utils.datamapper
 
 import com.rad.rweather.core.data.source.local.entity.*
-import com.rad.rweather.core.data.source.remote.response.*
 import com.rad.rweather.core.domain.model.*
 
 object MapperEntityToDomain {
 
-    fun mapEntityToDomain(data: ForecastEntity): Forecast {
+    fun mapEntityToDomain(data: ForecastEntity?): Forecast? {
 
         return Forecast(
 
-            city = data.city?.let { mapCityEntityToCity(it) },
-            cod = data.cod,
-            cnt = data.cnt,
-            message = data.message,
-            list = data.list?.let { mapListForecastEntityToListForecast(it) }
+            city = data?.city?.let { mapCityEntityToCity(it) },
+            cod = data?.cod,
+            cnt = data?.cnt,
+            message = data?.message,
+            list = data?.list?.let { mapListForecastEntityToListForecast(it) }
         )
     }
 
-    private fun mapCityEntityToCity(data: CityEntity): City {
+    private fun mapCityEntityToCity(data: CityEntity?): City? {
 
         return City(
 
-            id = data.cityId,
-            name = data.name,
-            country = data.country,
-            population = data.population,
-            timeZone = data.timeZone,
-            sunrise = data.sunrise,
-            sunset = data.sunset,
-            coord = data.coord?.let { mapCoordEntityToCoord(it) }
+            id = data?.cityId,
+            name = data?.name,
+            country = data?.country,
+            population = data?.population,
+            timeZone = data?.timeZone,
+            sunrise = data?.sunrise,
+            sunset = data?.sunset,
+            coord = data?.coord?.let { mapCoordEntityToCoord(it) }
 
         )
     }

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.rad.rweather.core.data.source.remote.RemoteDataSource
 import com.rad.rweather.core.data.source.remote.network.ApiClient
 import com.rad.rweather.core.data.source.remote.network.ApiConfig

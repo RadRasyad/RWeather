@@ -40,8 +40,8 @@ class DailyAdapter: RecyclerView.Adapter<DailyAdapter.DailyViewHolder>() {
                 val date = forecast.dateText?.let { getDay(it) }
                 tvDay.text = date
 
-                tvMinTemp.text = forecast.main?.tempMin.toString() + "°"
-                tvMaxTemp.text = forecast.main?.tempMax.toString() + "°"
+                tvMinTemp.text = forecast.main?.tempMin!!.toInt().toString() + "°"
+                tvMaxTemp.text = forecast.main.tempMax!!.toInt().toString() + "°"
 
                 val img = forecast.weather?.get(0)?.icon
                 lavWeather.setAnimation(getLottieSrc(img!!))

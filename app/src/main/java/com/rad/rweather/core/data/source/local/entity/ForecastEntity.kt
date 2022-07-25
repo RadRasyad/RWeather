@@ -1,5 +1,6 @@
 package com.rad.rweather.core.data.source.local.entity
 
+import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -15,6 +16,7 @@ data class ForecastEntity (
     var cnt: Int?,
 
     @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "cod")
     var cod: String,
 

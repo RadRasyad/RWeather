@@ -30,7 +30,34 @@ class RemoteDataSource private constructor(private val service: ApiClient) {
     fun getForecast(lat: Double, lon: Double): LiveData<ApiResponse<ForecastResponse>> {
         val resultData = MutableLiveData<ApiResponse<ForecastResponse>>()
 
-        service.getForecast(lat, lon, appID).enqueue(object :
+        val units = "metric"
+
+        service.getForecast(lat, lon, appID, units).enqueue(object :
+            Callback<ForecastResponse> {
+            override fun onResponse(
+                call: Call<ForecastResponse>,
+                response: Response<ForecastResponse>
+            ) {
+                val data = response.body()
+                resultData.value = if (data!=null) ApiResponse.Success(data) else ApiResponse.Empty
+            }
+
+            override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
+                resultData.value = ApiResponse.Error(t.message.toString())
+                Log.d("Response Failed", t.message.toString())
+            }
+
+        })
+
+        return resultData
+    }
+
+    fun getCurrentForecast(lat: Double, lon: Double): LiveData<ApiResponse<ForecastResponse>> {
+        val resultData = MutableLiveData<ApiResponse<ForecastResponse>>()
+
+        val units = "metric"
+
+        service.getCurrentForecast(lat, lon, appID, units).enqueue(object :
             Callback<ForecastResponse> {
             override fun onResponse(
                 call: Call<ForecastResponse>,

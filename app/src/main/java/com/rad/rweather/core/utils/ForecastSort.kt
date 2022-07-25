@@ -33,8 +33,9 @@ object ForecastSort {
 
     fun sortHourly(listForecast: List<ListForecast>): List<ListForecast> {
 
-        return listForecast
+        return listForecast.sortedBy { it.dateText }
             .subList(0,8)
+
     }
 
 

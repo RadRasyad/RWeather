@@ -7,9 +7,10 @@ import com.rad.rweather.core.domain.model.ListForecast
 import com.rad.rweather.core.utils.DateFormatter
 import com.rad.rweather.core.utils.ForecastSort
 import com.rad.rweather.core.utils.getLottieSrc
-import com.rad.rweather.databinding.ActivityMainBinding
-import com.rad.rweather.databinding.DailyForecastRowBinding
 import com.rad.rweather.databinding.HourlyForecastRowBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HourlyAdapter: RecyclerView.Adapter<HourlyAdapter.DailyViewHolder>() {
 
@@ -19,7 +20,10 @@ class HourlyAdapter: RecyclerView.Adapter<HourlyAdapter.DailyViewHolder>() {
         if (data==null) return
 
         listForecast.clear()
-        listForecast.addAll(ForecastSort.sortHourly(data))
+        CoroutineScope(Dispatchers.IO).launch {
+
+            listForecast.addAll(ForecastSort.sortHourly(data))
+        }
         notifyDataSetChanged()
     }
 
@@ -41,7 +45,7 @@ class HourlyAdapter: RecyclerView.Adapter<HourlyAdapter.DailyViewHolder>() {
             binding.apply {
                 val date = forecast.dateText?.let { DateFormatter.getHour(it) }
                 tvHour.text = date
-                tvTemp.text = forecast.main?.temp.toString() + "°"
+                tvTemp.text = forecast.main?.temp?.toInt().toString() + "°"
 
                 val img = forecast.weather?.get(0)?.icon
                 lavWeather.setAnimation(getLottieSrc(img!!))

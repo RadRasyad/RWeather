@@ -4,39 +4,39 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-@Entity(tableName = "list_forecast_entity")
+@JsonClass(generateAdapter = true)
 data class ListForecastEntity(
 
-
-    @ColumnInfo(name = "date")
+    @Json(name = "date")
     val date: Long?,
 
-    @Embedded
+    @Json(name = "main")
     val main: MainWeatherEntity?,
 
-    @ColumnInfo(name = "weather_item")
+    @Json(name = "weather")
     val weather: List<WeatherItemEntity>?,
 
-    @Embedded
+    @Json(name = "cloud")
     val clouds: CloudsEntity?,
 
-    @Embedded
+    @Json(name = "wind")
     val wind: WindEntity?,
 
-    @ColumnInfo(name = "visibility")
+    @Json(name = "visibility")
     val visibility: Int?,
 
-    @ColumnInfo(name = "pop")
+    @Json(name = "pop")
     val pop: Double?,
 
-    @Embedded
+    @Json(name = "rain")
     val rain: RainEntity?,
 
-    @Embedded
+    @Json(name = "sys")
     val sys: SysEntity?,
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "datetext")
+    @Json(name = "dateTxt")
     val dateText: String?,
 )

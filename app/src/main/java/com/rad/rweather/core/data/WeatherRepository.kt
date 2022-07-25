@@ -1,6 +1,7 @@
 package com.rad.rweather.core.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.rad.rweather.core.data.source.local.LocalDataSource
 import com.rad.rweather.core.data.source.remote.RemoteDataSource
@@ -36,7 +37,8 @@ class WeatherRepository private constructor(
         object : NetworkBoundResource<Forecast, ForecastResponse>(appExecutors) {
 
             override fun loadFromDB(): LiveData<Forecast> {
-                return Transformations.map(localDataSource.getForecast()) {
+                val data = localDataSource.getForecast()
+                return Transformations.map(data) {
                     MapperEntityToDomain.mapEntityToDomain(it)
                 }
             }
