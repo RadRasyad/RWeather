@@ -40,6 +40,7 @@ class RemoteDataSource private constructor(private val service: ApiClient) {
             ) {
                 val data = response.body()
                 resultData.value = if (data!=null) ApiResponse.Success(data) else ApiResponse.Empty
+
             }
 
             override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {

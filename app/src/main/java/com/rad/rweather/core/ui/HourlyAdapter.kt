@@ -1,5 +1,6 @@
 package com.rad.rweather.core.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -20,10 +21,8 @@ class HourlyAdapter: RecyclerView.Adapter<HourlyAdapter.DailyViewHolder>() {
         if (data==null) return
 
         listForecast.clear()
-        CoroutineScope(Dispatchers.IO).launch {
-
-            listForecast.addAll(ForecastSort.sortHourly(data))
-        }
+        listForecast.addAll(ForecastSort.sortHourly(data))
+        Log.d("adapter", listForecast.size.toString())
         notifyDataSetChanged()
     }
 

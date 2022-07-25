@@ -42,33 +42,43 @@ class MainActivity : AppCompatActivity() {
 
         val factory = ViewModelFactory.getInstance(this)
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
-
         mainViewModel.forecast(-6.966667, 110.416664).observe(this) { forecast ->
+
+
             if (forecast != null) {
+                Log.d("Data List", forecast.data?.list?.size.toString())
                 when (forecast) {
                     is Resource.Loading -> {
-
+                        binding.constraint.visibility = View.VISIBLE
                     }
 
                     is Resource.Success -> {
                         binding.constraint.visibility = View.VISIBLE
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            forecast.data?.let { setCurrentForecast(it) }
 
-                            Log.d("Data List", forecast.data?.list?.size.toString())
-                            hourlyAdapter.setData(forecast.data?.list)
-                            dailyAdapter.setData(forecast.data?.list)
+                        forecast.data?.let { setCurrentForecast(it) }
 
-                        }
+                        hourlyAdapter.setData(forecast.data?.list)
+                        dailyAdapter.setData(forecast.data?.list)
+
                     }
 
                     is Resource.Error -> {
+
+                        if (forecast.data?.list?.size != null) {
+                            setCurrentForecast(forecast.data)
+
+                            hourlyAdapter.setData(forecast.data.list)
+                            dailyAdapter.setData(forecast.data.list)
+                        } else {
+                            binding.constraint.visibility = View.GONE
+                        }
                         Snackbar.make(binding.root, "Error", Snackbar.LENGTH_LONG)
                     }
                 }
             }
 
         }
+
 
         with(binding.rvHourly) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
