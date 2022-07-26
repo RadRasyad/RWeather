@@ -1,7 +1,9 @@
 package com.rad.rweather.core.domain.model.currentforecast
 
+import com.rad.rweather.core.data.source.remote.response.forecast.WeatherItemResponse
 import com.rad.rweather.core.domain.model.*
 import com.rad.rweather.core.domain.model.forecast.MainWeather
+import com.rad.rweather.core.domain.model.forecast.WeatherItem
 
 data class CurrentWeather(
 
@@ -13,9 +15,10 @@ data class CurrentWeather(
     val coord: Coord?,
     val date: Int?,
     val timezone: Int?,
-    val main: List<MainWeather>?,
+    val main: MainWeather?,
     val wind: Wind?,
     val clouds: Clouds?,
     val rain: Rain?,
+    val weather: List<WeatherItem>?,
     val sys: CurrentWeatherSys?
 )

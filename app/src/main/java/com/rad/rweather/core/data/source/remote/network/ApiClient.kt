@@ -1,5 +1,6 @@
 package com.rad.rweather.core.data.source.remote.network
 
+import com.rad.rweather.core.data.source.remote.response.currentforecast.CurrentWeatherResponse
 import com.rad.rweather.core.data.source.remote.response.forecast.ForecastResponse
 import retrofit2.Call
 import retrofit2.http.GET
@@ -21,6 +22,6 @@ interface ApiClient {
         @Query("lon") lon: Double,
         @Query("appid") appId: String,
         @Query("units") units: String
-    ): Call<ForecastResponse>
+    ): Call<CurrentWeatherResponse>
 
 }

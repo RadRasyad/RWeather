@@ -6,8 +6,11 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieDrawable
 import com.google.android.material.snackbar.Snackbar
 import com.rad.rweather.core.data.Resource
+import com.rad.rweather.core.domain.model.currentforecast.CurrentWeather
 import com.rad.rweather.core.domain.model.forecast.Forecast
 import com.rad.rweather.core.ui.DailyAdapter
 import com.rad.rweather.core.ui.HourlyAdapter
@@ -15,6 +18,11 @@ import com.rad.rweather.databinding.ActivityMainBinding
 import com.rad.rweather.core.ui.ViewModelFactory
 import com.rad.rweather.core.utils.DateFormatter
 import com.rad.rweather.core.utils.getLottieSrc
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,9 +43,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         mainViewModel.forecast(-6.966667, 110.416664).observe(this) { forecast ->
 
-
             if (forecast != null) {
-                Log.d("Data List", forecast.data?.list?.size.toString())
                 when (forecast) {
                     is Resource.Loading -> {
                         binding.constraint.visibility = View.VISIBLE
@@ -46,20 +52,16 @@ class MainActivity : AppCompatActivity() {
                     is Resource.Success -> {
                         binding.constraint.visibility = View.VISIBLE
 
-                        forecast.data?.let { setCurrentForecast(it) }
-
                         hourlyAdapter.setData(forecast.data?.list)
                         dailyAdapter.setData(forecast.data?.list)
-
                     }
 
                     is Resource.Error -> {
-
                         if (forecast.data?.list?.size != null) {
-                            setCurrentForecast(forecast.data)
 
                             hourlyAdapter.setData(forecast.data.list)
                             dailyAdapter.setData(forecast.data.list)
+                            Snackbar.make(binding.root, "Tidak Ada Koneksi", Snackbar.LENGTH_LONG)
                         } else {
                             binding.constraint.visibility = View.GONE
                         }
@@ -68,8 +70,34 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        }
+            mainViewModel.currentForecast(-6.966667, 110.416664).observe(this) { forecast ->
+                if (forecast!=null) {
+                    when (forecast) {
+                        is Resource.Loading -> {
+                            binding.constraint.visibility = View.VISIBLE
+                        }
 
+                        is Resource.Success -> {
+                            binding.constraint.visibility = View.VISIBLE
+
+                            forecast.data?.let { setCurrentForecast(it) }
+                        }
+
+                        is Resource.Error -> {
+
+                            if (forecast.data?.weather?.size != null) {
+                                setCurrentForecast(forecast.data)
+                                Snackbar.make(binding.root, forecast.message.toString(), Snackbar.LENGTH_LONG)
+                            } else {
+                                binding.constraint.visibility = View.GONE
+                            }
+                            //Snackbar.make(binding.root, "Error", Snackbar.LENGTH_LONG)
+                        }
+                    }
+                }
+            }
+
+        }
 
         with(binding.rvHourly) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -86,25 +114,23 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun setCurrentForecast(forecast: Forecast) {
+    private fun setCurrentForecast(forecast: CurrentWeather) {
         binding.apply {
-            val currentForecast = forecast.list?.get(0)
 
-            tvCity.text = forecast.city?.name
-            tvTemp.text = currentForecast?.main?.temp?.toInt().toString() + "°"
+            tvCity.text = forecast.name
+            tvTemp.text = forecast.main?.temp?.toInt().toString() + "°"
 
-            val date = currentForecast?.dateText
-            tvDate.text = date?.let { DateFormatter.getDayNHour(it) }
+            val date = forecast.date?.toLong()?.let { DateFormatter.getDayNHour(it) }
+            tvDate.text = date
 
-            val img = currentForecast?.weather?.get(0)?.icon
-
+            val img = forecast.weather?.get(0)?.icon
             lavWeather.setAnimation(img?.let { getLottieSrc(it) })
             lavWeather.playAnimation()
-            lavWeather.loop(true)
-
+            lavWeather.repeatMode = LottieDrawable.INFINITE
 
         }
     }
+
 
 
 }

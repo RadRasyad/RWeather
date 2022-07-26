@@ -1,11 +1,15 @@
 package com.rad.rweather.core.utils.datamapper
 
 import com.rad.rweather.core.data.source.local.entity.*
+import com.rad.rweather.core.data.source.local.entity.currentforecast.CurrentWeatherEntity
+import com.rad.rweather.core.data.source.local.entity.currentforecast.CurrentWeatherSysEntity
 import com.rad.rweather.core.data.source.local.entity.forecast.ForecastEntity
 import com.rad.rweather.core.data.source.local.entity.forecast.ListForecastEntity
 import com.rad.rweather.core.data.source.local.entity.forecast.MainWeatherEntity
-import com.rad.rweather.core.data.source.local.entity.forecast.WeatherItemEntity
+import com.rad.rweather.core.data.source.local.entity.WeatherItemEntity
 import com.rad.rweather.core.data.source.remote.response.*
+import com.rad.rweather.core.data.source.remote.response.currentforecast.CurrentWeatherResponse
+import com.rad.rweather.core.data.source.remote.response.currentforecast.CurrentWeatherSysResponse
 import com.rad.rweather.core.data.source.remote.response.forecast.ForecastResponse
 import com.rad.rweather.core.data.source.remote.response.forecast.ListForecastResponse
 import com.rad.rweather.core.data.source.remote.response.forecast.MainWeatherResponse
@@ -13,12 +17,11 @@ import com.rad.rweather.core.data.source.remote.response.forecast.WeatherItemRes
 
 object MapperResponseToEntity {
 
-    fun mapForecastResponseToEntity(data: ForecastResponse): ForecastEntity {
+    fun mapForecastResponseToEntity(data: ForecastResponse?): ForecastEntity {
 
         return ForecastEntity(
-
-            city = data.city?.let { mapCityResponseToEntity(it) },
-            cod = data.cod!!,
+            city = data?.city?.let { mapCityResponseToEntity(it) },
+            cod = data?.cod!!,
             cnt = data.cnt,
             message = data.message,
             list = data.list?.let { mapListForecastResponseToListForecastEntity(it) }
@@ -26,10 +29,29 @@ object MapperResponseToEntity {
         )
     }
 
+    fun mapCurrentForecastResponseToEntity(data: CurrentWeatherResponse?): CurrentWeatherEntity {
+
+        return CurrentWeatherEntity(
+            id = data?.id,
+            cod = data?.cod,
+            base = data?.base,
+            name = data?.name,
+            visibility = data?.visibility,
+            coord = data?.coord?.let { mapCoordResponseToCoordEntity(it) },
+            date = data?.date,
+            timezone = data?.timezone,
+            main = data?.main?.let { mapMainResponseToMainEntity(it) },
+            wind = data?.wind?.let { mapWindResponseToWindEntity(it) },
+            rain = data?.rain?.let { mapRainResponseToRainEntity(it) },
+            sys = data?.sys?.let { mapSysResponseToSysEntity2(it) },
+            clouds = data?.clouds?.let { mapCloudResponseToCloundEntity(it) },
+            weather = data?.weather?.let { mapWeatherItemResponseToWeatherItemEntity(it) }
+        )
+    }
+
     fun mapCityResponseToEntity(data: CityResponse): CityEntity {
 
         return CityEntity(
-
             cityId = data.id,
             name = data.name,
             country = data.country,
@@ -38,12 +60,10 @@ object MapperResponseToEntity {
             sunrise = data.sunrise,
             sunset = data.sunset,
             coord = data.coord?.let { mapCoordResponseToCoordEntity(it) }
-
         )
     }
 
     fun mapCoordResponseToCoordEntity(data: CoordResponse): CoordEntity {
-
         return CoordEntity(
             lat = data.lat,
             lon = data.lon
@@ -89,7 +109,6 @@ object MapperResponseToEntity {
     fun mapWeatherItemResponseToWeatherItemEntity(data: List<WeatherItemResponse>): List<WeatherItemEntity> {
 
         val weatherItemEntity = ArrayList<WeatherItemEntity>()
-
         data.map {
             val weather = WeatherItemEntity(
                 id = it.id,
@@ -110,6 +129,7 @@ object MapperResponseToEntity {
     }
 
     fun mapWindResponseToWindEntity(data: WindResponse): WindEntity {
+
         return WindEntity(
             speed = data.speed,
             deg = data.deg,
@@ -118,14 +138,27 @@ object MapperResponseToEntity {
     }
 
     fun mapRainResponseToRainEntity(data: RainResponse): RainEntity {
+
         return RainEntity(
             r3h = data.r3h
         )
     }
 
     fun mapSysResponseToSysEntity(data: SysResponse): SysEntity {
+
         return SysEntity(
             pod = data.pod
+        )
+    }
+
+    fun mapSysResponseToSysEntity2(data: CurrentWeatherSysResponse): CurrentWeatherSysEntity {
+
+        return CurrentWeatherSysEntity(
+            type = data.type,
+            idSys = data.idSys,
+            country = data.country,
+            sunrise = data.sunrise,
+            sunset = data.sunset
         )
     }
 

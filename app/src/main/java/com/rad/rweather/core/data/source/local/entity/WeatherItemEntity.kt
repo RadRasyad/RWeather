@@ -1,9 +1,7 @@
-package com.rad.rweather.core.data.source.local.entity.forecast
+package com.rad.rweather.core.data.source.local.entity
 
-import androidx.annotation.NonNull
-import androidx.room.ColumnInfo
+
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
 @Entity(tableName = "weather_item_entity")

@@ -1,22 +1,23 @@
 package com.rad.rweather.core.data.source.local.entity.currentforecast
 
-import com.google.gson.annotations.SerializedName
+import androidx.room.ColumnInfo
+import androidx.room.Entity
 
-
+@Entity(tableName = "crn_sys_entity")
 data class CurrentWeatherSysEntity (
 
-    @SerializedName("type")
+    @ColumnInfo(name = "crn_type")
     val type: Int?,
 
-    @SerializedName("id")
+    @ColumnInfo(name = "crn_idsys")
     val idSys: Int?,
 
-    @SerializedName("country")
+    @ColumnInfo(name = "crn_country")
     val country: String?,
 
-    @SerializedName("sunrise")
+    @ColumnInfo(name = "crn_sunrise")
     val sunrise: Int?,
 
-    @SerializedName("sunset")
+    @ColumnInfo(name = "crn_sunset")
     val sunset: Int?
 )

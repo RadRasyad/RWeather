@@ -5,7 +5,9 @@ import androidx.lifecycle.Transformations
 import com.rad.rweather.core.data.source.local.LocalDataSource
 import com.rad.rweather.core.data.source.remote.RemoteDataSource
 import com.rad.rweather.core.data.source.remote.network.ApiResponse
+import com.rad.rweather.core.data.source.remote.response.currentforecast.CurrentWeatherResponse
 import com.rad.rweather.core.data.source.remote.response.forecast.ForecastResponse
+import com.rad.rweather.core.domain.model.currentforecast.CurrentWeather
 import com.rad.rweather.core.domain.model.forecast.Forecast
 import com.rad.rweather.core.domain.repository.IWeatherRepository
 import com.rad.rweather.core.utils.AppExecutors
@@ -54,4 +56,28 @@ class WeatherRepository private constructor(
             }
 
         }.asLiveData()
+
+    override fun getCurrentForecast(lat: Double, lon: Double): LiveData<Resource<CurrentWeather>> =
+        object : NetworkBoundResource<CurrentWeather, CurrentWeatherResponse>(appExecutors) {
+
+            override fun loadFromDB(): LiveData<CurrentWeather> {
+                val data = localDataSource.getCurrentForecast()
+                return Transformations.map(data) {
+                    MapperEntityToDomain.mapCurrentForecastEntityToDomain(it)
+                }
+            }
+
+            override fun shouldFetch(data: CurrentWeather?): Boolean = true
+
+            override fun createCall(): LiveData<ApiResponse<CurrentWeatherResponse>> =
+                remoteDataSource.getCurrentForecast(lat, lon)
+
+            override fun saveCallResult(data: CurrentWeatherResponse) {
+                val forecast = MapperResponseToEntity.mapCurrentForecastResponseToEntity(data)
+
+                localDataSource.insertCurrentForecast(forecast)
+            }
+
+        }.asLiveData()
+
 }

@@ -4,6 +4,7 @@ import com.rad.rweather.core.data.source.local.entity.CloudsEntity
 import com.rad.rweather.core.data.source.local.entity.RainEntity
 import com.rad.rweather.core.data.source.local.entity.SysEntity
 import com.rad.rweather.core.data.source.local.entity.WindEntity
+import com.rad.rweather.core.data.source.local.entity.WeatherItemEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
