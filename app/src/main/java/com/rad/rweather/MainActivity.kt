@@ -5,25 +5,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.rad.rweather.core.data.Resource
-import com.rad.rweather.core.data.source.local.room.ForecastDao
-import com.rad.rweather.core.data.source.local.room.ForecastDatabase
-import com.rad.rweather.core.data.source.remote.network.ApiResponse
-import com.rad.rweather.core.data.source.remote.response.ForecastResponse
-import com.rad.rweather.core.domain.model.Forecast
-import com.rad.rweather.core.domain.model.ListForecast
+import com.rad.rweather.core.domain.model.forecast.Forecast
 import com.rad.rweather.core.ui.DailyAdapter
 import com.rad.rweather.core.ui.HourlyAdapter
 import com.rad.rweather.databinding.ActivityMainBinding
 import com.rad.rweather.core.ui.ViewModelFactory
 import com.rad.rweather.core.utils.DateFormatter
 import com.rad.rweather.core.utils.getLottieSrc
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {

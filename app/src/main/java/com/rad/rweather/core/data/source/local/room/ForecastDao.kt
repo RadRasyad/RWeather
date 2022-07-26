@@ -5,9 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.rad.rweather.core.data.source.local.entity.ForecastEntity
-import com.rad.rweather.core.data.source.local.entity.ListForecastEntity
-import com.rad.rweather.core.domain.model.Forecast
+import com.rad.rweather.core.data.source.local.entity.forecast.ForecastEntity
 
 @Dao
 interface ForecastDao {

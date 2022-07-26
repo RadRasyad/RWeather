@@ -1,13 +1,12 @@
 package com.rad.rweather.core.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.rad.rweather.core.data.source.local.LocalDataSource
 import com.rad.rweather.core.data.source.remote.RemoteDataSource
 import com.rad.rweather.core.data.source.remote.network.ApiResponse
-import com.rad.rweather.core.data.source.remote.response.ForecastResponse
-import com.rad.rweather.core.domain.model.Forecast
+import com.rad.rweather.core.data.source.remote.response.forecast.ForecastResponse
+import com.rad.rweather.core.domain.model.forecast.Forecast
 import com.rad.rweather.core.domain.repository.IWeatherRepository
 import com.rad.rweather.core.utils.AppExecutors
 import com.rad.rweather.core.utils.datamapper.MapperEntityToDomain
@@ -17,7 +16,7 @@ class WeatherRepository private constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
-) : IWeatherRepository{
+) : IWeatherRepository {
 
     companion object {
         @Volatile
@@ -39,7 +38,7 @@ class WeatherRepository private constructor(
             override fun loadFromDB(): LiveData<Forecast> {
                 val data = localDataSource.getForecast()
                 return Transformations.map(data) {
-                    MapperEntityToDomain.mapEntityToDomain(it)
+                    MapperEntityToDomain.mapForecastEntityToDomain(it)
                 }
             }
 
@@ -49,7 +48,7 @@ class WeatherRepository private constructor(
                 remoteDataSource.getForecast(lat, lon)
 
             override fun saveCallResult(data: ForecastResponse) {
-                val forecast = MapperResponseToEntity.mapResponseToEntity(data)
+                val forecast = MapperResponseToEntity.mapForecastResponseToEntity(data)
 
                 localDataSource.insertForecast(forecast)
             }

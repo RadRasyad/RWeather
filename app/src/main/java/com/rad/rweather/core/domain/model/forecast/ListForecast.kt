@@ -1,4 +1,6 @@
-package com.rad.rweather.core.domain.model
+package com.rad.rweather.core.domain.model.forecast
+
+import com.rad.rweather.core.domain.model.*
 
 
 data class ListForecast(

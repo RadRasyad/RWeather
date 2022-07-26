@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.rad.rweather.core.data.source.local.entity.*
+import com.rad.rweather.core.data.source.local.entity.forecast.ForecastEntity
 import com.rad.rweather.core.utils.DataConverter
 
 @Database(

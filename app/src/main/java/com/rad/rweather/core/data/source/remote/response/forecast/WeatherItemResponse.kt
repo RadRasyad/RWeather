@@ -1,4 +1,4 @@
-package com.rad.rweather.core.data.source.remote.response
+package com.rad.rweather.core.data.source.remote.response.forecast
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,9 +1,9 @@
-package com.rad.rweather.core.data.source.local.entity
+package com.rad.rweather.core.data.source.local.entity.forecast
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.rad.rweather.core.data.source.local.entity.CloudsEntity
+import com.rad.rweather.core.data.source.local.entity.RainEntity
+import com.rad.rweather.core.data.source.local.entity.SysEntity
+import com.rad.rweather.core.data.source.local.entity.WindEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

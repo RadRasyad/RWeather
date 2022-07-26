@@ -5,8 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.rad.rweather.BuildConfig
 import com.rad.rweather.core.data.source.remote.network.ApiClient
-import com.rad.rweather.core.data.source.remote.response.ForecastResponse
-import com.rad.rweather.core.data.source.remote.network.ApiConfig
+import com.rad.rweather.core.data.source.remote.response.forecast.ForecastResponse
 import com.rad.rweather.core.data.source.remote.network.ApiResponse
 import retrofit2.Call
 import retrofit2.Callback

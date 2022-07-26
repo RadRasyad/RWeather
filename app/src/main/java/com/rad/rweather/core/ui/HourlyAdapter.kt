@@ -4,14 +4,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.rad.rweather.core.domain.model.ListForecast
+import com.rad.rweather.core.domain.model.forecast.ListForecast
 import com.rad.rweather.core.utils.DateFormatter
 import com.rad.rweather.core.utils.ForecastSort
 import com.rad.rweather.core.utils.getLottieSrc
 import com.rad.rweather.databinding.HourlyForecastRowBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class HourlyAdapter: RecyclerView.Adapter<HourlyAdapter.DailyViewHolder>() {
 

@@ -1,11 +1,19 @@
 package com.rad.rweather.core.utils.datamapper
 
 import com.rad.rweather.core.data.source.local.entity.*
+import com.rad.rweather.core.data.source.local.entity.forecast.ForecastEntity
+import com.rad.rweather.core.data.source.local.entity.forecast.ListForecastEntity
+import com.rad.rweather.core.data.source.local.entity.forecast.MainWeatherEntity
+import com.rad.rweather.core.data.source.local.entity.forecast.WeatherItemEntity
 import com.rad.rweather.core.data.source.remote.response.*
+import com.rad.rweather.core.data.source.remote.response.forecast.ForecastResponse
+import com.rad.rweather.core.data.source.remote.response.forecast.ListForecastResponse
+import com.rad.rweather.core.data.source.remote.response.forecast.MainWeatherResponse
+import com.rad.rweather.core.data.source.remote.response.forecast.WeatherItemResponse
 
 object MapperResponseToEntity {
 
-    fun mapResponseToEntity(data: ForecastResponse): ForecastEntity {
+    fun mapForecastResponseToEntity(data: ForecastResponse): ForecastEntity {
 
         return ForecastEntity(
 
@@ -63,7 +71,7 @@ object MapperResponseToEntity {
         return forecastList
     }
 
-    fun mapMainResponseToMainEntity(data: MainWeatherResponse): MainWeatherEntity{
+    fun mapMainResponseToMainEntity(data: MainWeatherResponse): MainWeatherEntity {
 
         return MainWeatherEntity(
             temp = data.temp,

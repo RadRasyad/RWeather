@@ -1,6 +1,10 @@
-package com.rad.rweather.core.data.source.remote.response
+package com.rad.rweather.core.data.source.remote.response.forecast
 
 import com.google.gson.annotations.SerializedName
+import com.rad.rweather.core.data.source.remote.response.CloudsResponse
+import com.rad.rweather.core.data.source.remote.response.RainResponse
+import com.rad.rweather.core.data.source.remote.response.SysResponse
+import com.rad.rweather.core.data.source.remote.response.WindResponse
 
 data class ListForecastResponse(
 

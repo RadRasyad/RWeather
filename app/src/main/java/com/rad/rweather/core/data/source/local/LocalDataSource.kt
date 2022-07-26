@@ -1,7 +1,7 @@
 package com.rad.rweather.core.data.source.local
 
 import androidx.lifecycle.LiveData
-import com.rad.rweather.core.data.source.local.entity.ForecastEntity
+import com.rad.rweather.core.data.source.local.entity.forecast.ForecastEntity
 import com.rad.rweather.core.data.source.local.room.ForecastDao
 
 class LocalDataSource private constructor(private val forecastDao: ForecastDao) {

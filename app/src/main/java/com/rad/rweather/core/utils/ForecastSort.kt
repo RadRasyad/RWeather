@@ -1,6 +1,6 @@
 package com.rad.rweather.core.utils
 
-import com.rad.rweather.core.domain.model.ListForecast
+import com.rad.rweather.core.domain.model.forecast.ListForecast
 
 object ForecastSort {
 

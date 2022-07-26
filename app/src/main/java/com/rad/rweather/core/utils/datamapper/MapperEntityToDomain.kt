@@ -1,11 +1,16 @@
 package com.rad.rweather.core.utils.datamapper
 
 import com.rad.rweather.core.data.source.local.entity.*
+import com.rad.rweather.core.data.source.local.entity.forecast.ForecastEntity
+import com.rad.rweather.core.data.source.local.entity.forecast.ListForecastEntity
+import com.rad.rweather.core.data.source.local.entity.forecast.MainWeatherEntity
+import com.rad.rweather.core.data.source.local.entity.forecast.WeatherItemEntity
 import com.rad.rweather.core.domain.model.*
+import com.rad.rweather.core.domain.model.forecast.*
 
 object MapperEntityToDomain {
 
-    fun mapEntityToDomain(data: ForecastEntity?): Forecast? {
+    fun mapForecastEntityToDomain(data: ForecastEntity?): Forecast? {
 
         return Forecast(
 

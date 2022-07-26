@@ -1,9 +1,7 @@
 package com.rad.rweather.core.utils
 
-import android.util.Log
 import androidx.room.TypeConverter
-import com.rad.rweather.core.data.source.local.entity.ListForecastEntity
-import com.rad.rweather.core.data.source.local.entity.WeatherItemEntity
+import com.rad.rweather.core.data.source.local.entity.forecast.ListForecastEntity
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

@@ -1,10 +1,11 @@
-package com.rad.rweather.core.data.source.local.entity
+package com.rad.rweather.core.data.source.local.entity.forecast
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.rad.rweather.core.data.source.local.entity.CityEntity
 
 @Entity(tableName = "forecast_entity")
 data class ForecastEntity (

@@ -1,4 +1,4 @@
-package com.rad.rweather.core.domain.model
+package com.rad.rweather.core.domain.model.forecast
 
 
 data class WeatherItem (

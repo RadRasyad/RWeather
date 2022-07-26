@@ -3,7 +3,7 @@ package com.rad.rweather.core.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.rad.rweather.core.domain.model.ListForecast
+import com.rad.rweather.core.domain.model.forecast.ListForecast
 import com.rad.rweather.core.utils.DateFormatter.getDay
 import com.rad.rweather.core.utils.ForecastSort
 import com.rad.rweather.core.utils.getLottieSrc

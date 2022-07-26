@@ -1,4 +1,4 @@
-package com.rad.rweather.core.domain.model
+package com.rad.rweather.core.domain.model.forecast
 
 import com.google.gson.annotations.SerializedName
 

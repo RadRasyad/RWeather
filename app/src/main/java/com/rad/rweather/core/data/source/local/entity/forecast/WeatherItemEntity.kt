@@ -1,4 +1,4 @@
-package com.rad.rweather.core.data.source.local.entity
+package com.rad.rweather.core.data.source.local.entity.forecast
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
