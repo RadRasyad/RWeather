@@ -19,7 +19,6 @@ class HourlyAdapter: RecyclerView.Adapter<HourlyAdapter.DailyViewHolder>() {
 
         listForecast.clear()
         listForecast.addAll(ForecastSort.sortHourly(data))
-        Log.d("adapter", listForecast.size.toString())
         notifyDataSetChanged()
     }
 

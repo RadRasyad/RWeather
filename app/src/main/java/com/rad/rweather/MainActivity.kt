@@ -1,15 +1,28 @@
 package com.rad.rweather
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
+import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.rad.rweather.core.data.Resource
+import com.rad.rweather.core.domain.model.CurrentLocation
 import com.rad.rweather.core.domain.model.currentforecast.CurrentWeather
 import com.rad.rweather.core.domain.model.forecast.Forecast
 import com.rad.rweather.core.ui.DailyAdapter
@@ -30,18 +43,34 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var lat: Double = 0.0
+    private var lon: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        isLocationPermissionGranted()
+        val mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        val mGPS = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (mGPS) {
+            getCurrentLocation()
+        } else {
+            Toast.makeText(this,"Please Turn On the GPS", Toast.LENGTH_LONG).show()
+            Handler().postDelayed({
+                finish()
+            }, 3000)
+        }
         val hourlyAdapter = HourlyAdapter()
         val dailyAdapter = DailyAdapter()
 
+
         val factory = ViewModelFactory.getInstance(this)
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
-        mainViewModel.forecast(-6.966667, 110.416664).observe(this) { forecast ->
+        mainViewModel.forecast(lat, lon).observe(this) { forecast ->
 
             if (forecast != null) {
                 when (forecast) {
@@ -58,19 +87,18 @@ class MainActivity : AppCompatActivity() {
 
                     is Resource.Error -> {
                         if (forecast.data?.list?.size != null) {
-
                             hourlyAdapter.setData(forecast.data.list)
                             dailyAdapter.setData(forecast.data.list)
-                            Snackbar.make(binding.root, "Tidak Ada Koneksi", Snackbar.LENGTH_LONG)
+                            Snackbar.make(binding.root, forecast.message.toString(), Snackbar.LENGTH_LONG).show()
                         } else {
                             binding.constraint.visibility = View.GONE
+                            Snackbar.make(binding.root, forecast.message.toString(), Snackbar.LENGTH_LONG).show()
                         }
-                        Snackbar.make(binding.root, "Error", Snackbar.LENGTH_LONG)
                     }
                 }
             }
 
-            mainViewModel.currentForecast(-6.966667, 110.416664).observe(this) { forecast ->
+            mainViewModel.currentForecast(lat, lon).observe(this) { forecast ->
                 if (forecast!=null) {
                     when (forecast) {
                         is Resource.Loading -> {
@@ -79,7 +107,6 @@ class MainActivity : AppCompatActivity() {
 
                         is Resource.Success -> {
                             binding.constraint.visibility = View.VISIBLE
-
                             forecast.data?.let { setCurrentForecast(it) }
                         }
 
@@ -87,11 +114,9 @@ class MainActivity : AppCompatActivity() {
 
                             if (forecast.data?.weather?.size != null) {
                                 setCurrentForecast(forecast.data)
-                                Snackbar.make(binding.root, forecast.message.toString(), Snackbar.LENGTH_LONG)
                             } else {
                                 binding.constraint.visibility = View.GONE
                             }
-                            //Snackbar.make(binding.root, "Error", Snackbar.LENGTH_LONG)
                         }
                     }
                 }
@@ -131,6 +156,51 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun isLocationPermissionGranted(): Boolean {
+        return if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                0
+            )
+            false
+        } else {
+            true
+        }
+    }
+
+    private fun getCurrentLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        val request = LocationRequest()
+        request.interval = 10000
+        request.fastestInterval = 5000
+        request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        val permission = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.requestLocationUpdates(request, object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    val location: Location? = locationResult.lastLocation
+                    if (location != null) {
+                        lat = location.latitude
+                        lon = location.longitude
+                    }
+                }
+            }, null)
+        }
+    }
 
 
 }
