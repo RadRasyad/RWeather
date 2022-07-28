@@ -12,9 +12,11 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.LottieAnimationView
@@ -27,10 +29,13 @@ import com.rad.rweather.core.domain.model.currentforecast.CurrentWeather
 import com.rad.rweather.core.domain.model.forecast.Forecast
 import com.rad.rweather.core.ui.DailyAdapter
 import com.rad.rweather.core.ui.HourlyAdapter
+import com.rad.rweather.core.ui.NetworkStatusViewModel
 import com.rad.rweather.databinding.ActivityMainBinding
 import com.rad.rweather.core.ui.ViewModelFactory
 import com.rad.rweather.core.utils.DateFormatter
 import com.rad.rweather.core.utils.getLottieSrc
+import com.rad.rweather.core.utils.networkstatus.NetworkState
+import com.rad.rweather.core.utils.networkstatus.NetworkStatusTracker
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
@@ -46,6 +51,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var lat: Double = 0.0
     private var lon: Double = 0.0
+
+    private val viewModel: NetworkStatusViewModel by lazy {
+        ViewModelProvider(
+            this,
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    val networkStatusTracker = NetworkStatusTracker(this@MainActivity)
+                    return NetworkStatusViewModel(networkStatusTracker) as T
+                }
+            },
+        )[NetworkStatusViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +81,9 @@ class MainActivity : AppCompatActivity() {
                 finish()
             }, 3000)
         }
+
+        checkConnection()
+
         val hourlyAdapter = HourlyAdapter()
         val dailyAdapter = DailyAdapter()
 
@@ -202,5 +222,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    private fun checkConnection() {
+        viewModel.state.observe(this) { state ->
+            when(state) {
+                NetworkState.Error -> Snackbar.make(binding.root, "Disconnected", Snackbar.LENGTH_LONG).show()
+                else -> {}
+            }
+        }
+    }
 }
