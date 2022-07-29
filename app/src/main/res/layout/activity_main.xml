@@ -2,140 +2,157 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.RWeather.bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/sunny"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="32dp">
+        android:layout_height="wrap_content">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardCurrentWeather"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="32dp"
-            app:cardBackgroundColor="@color/cardSunny"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/tv_city"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="City"
-                    android:textSize="32sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_temp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="31°"
-                    android:textSize="40sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_date"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_city" />
-
-                <TextView
-                    android:id="@+id/tv_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Senin, 03.00"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/lav_weather"
-                    android:layout_width="160dp"
-                    android:layout_height="160dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:lottie_fileName="error.json"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardForecastHourly"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardCurrentWeather"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/cardSunny">
+            android:paddingBottom="32dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardCurrentWeather"
+                style="@style/Theme.RWeather.CustomCardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp">
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="32dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_hourly"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/hourly_forecast_row" />
+                    android:padding="16dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/tv_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="32sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/tv_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="40sp"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_date"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_city" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardForecastDaily"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="16dp"
-            app:cardBackgroundColor="@color/cardSunny"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardForecastHourly">
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lav_weather"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardForecastHourly"
+                style="@style/Theme.RWeather.CustomCardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp">
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardCurrentWeather">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_daily"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/daily_forecast_row" />
+                    android:padding="8dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_hourly"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:listitem="@layout/hourly_forecast_row" />
 
-        </androidx.cardview.widget.CardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardForecastDaily"
+                style="@style/Theme.RWeather.CustomCardview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardForecastHourly">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_daily"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:listitem="@layout/daily_forecast_row" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/progress"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="loading_cloud.json"
+            app:lottie_loop="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </ScrollView>

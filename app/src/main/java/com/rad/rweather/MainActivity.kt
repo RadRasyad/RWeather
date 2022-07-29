@@ -77,9 +77,6 @@ class MainActivity : AppCompatActivity() {
             getCurrentLocation()
         } else {
             Toast.makeText(this,"Please Turn On the GPS", Toast.LENGTH_LONG).show()
-            Handler().postDelayed({
-                finish()
-            }, 3000)
         }
 
         checkConnection()
@@ -96,16 +93,18 @@ class MainActivity : AppCompatActivity() {
                 when (forecast) {
                     is Resource.Loading -> {
                         binding.constraint.visibility = View.VISIBLE
+                        binding.progress.visibility = View.VISIBLE
                     }
 
                     is Resource.Success -> {
                         binding.constraint.visibility = View.VISIBLE
-
+                        binding.progress.visibility = View.GONE
                         hourlyAdapter.setData(forecast.data?.list)
                         dailyAdapter.setData(forecast.data?.list)
                     }
 
                     is Resource.Error -> {
+                        binding.progress.visibility = View.GONE
                         if (forecast.data?.list?.size != null) {
                             hourlyAdapter.setData(forecast.data.list)
                             dailyAdapter.setData(forecast.data.list)
@@ -202,10 +201,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun getCurrentLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        val request = LocationRequest()
-        request.interval = 10000
-        request.fastestInterval = 5000
-        request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        val request = LocationRequest.create().apply {
+            interval = 100
+            fastestInterval = 50
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            maxWaitTime = 100
+        }
         val permission = ContextCompat.checkSelfPermission(
             this, Manifest.permission.ACCESS_FINE_LOCATION
         )
