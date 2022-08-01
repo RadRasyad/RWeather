@@ -22,7 +22,7 @@ fun getLottieSrc(id: String): String {
         "50d" -> "weather_mist.json"
         "50n" -> "weather_mist.json"
         else ->{
-            "weather_sunny.json"
+            "error.json"
         }
     }
 }

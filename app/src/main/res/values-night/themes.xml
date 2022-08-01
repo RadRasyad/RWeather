@@ -16,6 +16,13 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="Theme.RWeather.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/sunny</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_rweather_icon</item>
+        <item name="postSplashScreenTheme">@style/Theme.RWeather.NoActionBar</item>
+    </style>
+
     <style name="Theme.RWeather.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -25,7 +32,7 @@
         <item name="android:background">@color/night</item>
     </style>
 
-    <style name="Theme.RWeather.CustomCardview" parent="Widget.MaterialComponents.CardView">
+    <style name="Theme.RWeather.CustomCardview" parent="CardView">
         <item name="cardBackgroundColor">@color/cardNight</item>
     </style>
 

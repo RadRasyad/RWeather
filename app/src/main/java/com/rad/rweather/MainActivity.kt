@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,7 +47,11 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var factory: ViewModelFactory
     private lateinit var mainViewModel: MainViewModel
+
+    private var hourlyAdapter = HourlyAdapter()
+    private var dailyAdapter = DailyAdapter()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var lat: Double = 0.0
@@ -67,6 +72,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        installSplashScreen()
         setContentView(binding.root)
 
         isLocationPermissionGranted()
@@ -81,12 +87,108 @@ class MainActivity : AppCompatActivity() {
 
         checkConnection()
 
-        val hourlyAdapter = HourlyAdapter()
-        val dailyAdapter = DailyAdapter()
+        hourlyAdapter = HourlyAdapter()
+        dailyAdapter = DailyAdapter()
 
-
-        val factory = ViewModelFactory.getInstance(this)
+        factory = ViewModelFactory.getInstance(this)
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
+        getCurrentForecast()
+        getDailyForecast()
+
+        with(binding.rvHourly) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = hourlyAdapter
+        }
+
+        with(binding.rvDaily) {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = dailyAdapter
+        }
+
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        getCurrentForecast()
+        getDailyForecast()
+    }
+
+    private fun isLocationPermissionGranted(): Boolean {
+        return if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                0
+            )
+            false
+        } else {
+            true
+        }
+    }
+
+    private fun getCurrentLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        val request = LocationRequest.create().apply {
+            interval = 100
+            fastestInterval = 50
+            priority = Priority.PRIORITY_HIGH_ACCURACY
+            maxWaitTime = 100
+        }
+        val permission = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.requestLocationUpdates(request, object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    val location: Location? = locationResult.lastLocation
+                    if (location != null) {
+                        lat = location.latitude
+                        lon = location.longitude
+                    }
+                }
+            }, null)
+        }
+    }
+
+    private fun getCurrentForecast() {
+        mainViewModel.currentForecast(lat, lon).observe(this) { forecast ->
+            if (forecast!=null) {
+                when (forecast) {
+                    is Resource.Loading -> {
+                        binding.constraint.visibility = View.VISIBLE
+                    }
+
+                    is Resource.Success -> {
+                        binding.constraint.visibility = View.VISIBLE
+                        forecast.data?.let { setCurrentForecast(it) }
+                    }
+
+                    is Resource.Error -> {
+
+                        if (forecast.data?.weather?.size != null) {
+                            setCurrentForecast(forecast.data)
+                        } else {
+                            binding.constraint.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getDailyForecast() {
         mainViewModel.forecast(lat, lon).observe(this) { forecast ->
 
             if (forecast != null) {
@@ -117,44 +219,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            mainViewModel.currentForecast(lat, lon).observe(this) { forecast ->
-                if (forecast!=null) {
-                    when (forecast) {
-                        is Resource.Loading -> {
-                            binding.constraint.visibility = View.VISIBLE
-                        }
-
-                        is Resource.Success -> {
-                            binding.constraint.visibility = View.VISIBLE
-                            forecast.data?.let { setCurrentForecast(it) }
-                        }
-
-                        is Resource.Error -> {
-
-                            if (forecast.data?.weather?.size != null) {
-                                setCurrentForecast(forecast.data)
-                            } else {
-                                binding.constraint.visibility = View.GONE
-                            }
-                        }
-                    }
-                }
-            }
-
         }
-
-        with(binding.rvHourly) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            setHasFixedSize(true)
-            adapter = hourlyAdapter
-        }
-
-        with(binding.rvDaily) {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = dailyAdapter
-        }
-
     }
 
 
@@ -162,7 +227,7 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
 
             tvCity.text = forecast.name
-            tvTemp.text = forecast.main?.temp?.toInt().toString() + "°"
+            tvTemp.text = (forecast.main?.temp?.toInt().toString() + "°") ?: "-"
 
             val date = forecast.date?.toLong()?.let { DateFormatter.getDayNHour(it) }
             tvDate.text = date
@@ -170,58 +235,11 @@ class MainActivity : AppCompatActivity() {
             val img = forecast.weather?.get(0)?.icon
             lavWeather.setAnimation(img?.let { getLottieSrc(it) })
             lavWeather.playAnimation()
-            lavWeather.repeatMode = LottieDrawable.INFINITE
-
+            lavWeather.repeatMode = LottieDrawable.RESTART
         }
     }
 
 
-    private fun isLocationPermissionGranted(): Boolean {
-        return if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                0
-            )
-            false
-        } else {
-            true
-        }
-    }
-
-    private fun getCurrentLocation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        val request = LocationRequest.create().apply {
-            interval = 100
-            fastestInterval = 50
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            maxWaitTime = 100
-        }
-        val permission = ContextCompat.checkSelfPermission(
-            this, Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        if (permission == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.requestLocationUpdates(request, object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    val location: Location? = locationResult.lastLocation
-                    if (location != null) {
-                        lat = location.latitude
-                        lon = location.longitude
-                    }
-                }
-            }, null)
-        }
-    }
 
     private fun checkConnection() {
         viewModel.state.observe(this) { state ->

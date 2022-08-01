@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="32dp">
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardCurrentWeather"
                 style="@style/Theme.RWeather.CustomCardview"
                 android:layout_width="match_parent"
@@ -41,7 +41,7 @@
 
                     <TextView
                         android:id="@+id/tv_city"
-                        android:layout_width="wrap_content"
+                        android:layout_width="168dp"
                         android:layout_height="wrap_content"
                         android:textSize="32sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -75,9 +75,9 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardForecastHourly"
                 style="@style/Theme.RWeather.CustomCardview"
                 android:layout_width="match_parent"
@@ -106,9 +106,9 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardForecastDaily"
                 style="@style/Theme.RWeather.CustomCardview"
                 android:layout_width="match_parent"
@@ -136,7 +136,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.airbnb.lottie.LottieAnimationView

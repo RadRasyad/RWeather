@@ -3,11 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/layout/activity_main.xml" value="0.28730226592560926" />
+        <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.275" />
+        <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/drawable/ic_launcher_background.xml" value="0.275" />
+        <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/drawable/ic_launcher_rweather_foreground.xml" value="0.275" />
+        <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/drawable/ic_rweather_icon.xml" value="0.275" />
+        <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/layout/activity_main_loading.xml" value="0.28730226592560926" />
         <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/layout/daily_forecast_row.xml" value="0.25" />
         <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/layout/forecast_row.xml" value="0.35" />
         <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/layout/hourly_forecast_row.xml" value="0.28730226592560926" />
+        <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.275" />
+        <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/mipmap-anydpi-v26/ic_launcher_rweather.xml" value="0.275" />
+        <entry key="..\:/Aplikasiku/RWeather/app/src/main/res/mipmap-anydpi-v26/ic_launcher_rweather_round.xml" value="0.275" />
       </map>
     </option>
   </component>
