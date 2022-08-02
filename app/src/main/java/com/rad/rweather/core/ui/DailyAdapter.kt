@@ -8,6 +8,10 @@ import com.rad.rweather.core.utils.DateFormatter.getDay
 import com.rad.rweather.core.utils.ForecastSort
 import com.rad.rweather.core.utils.getLottieSrc
 import com.rad.rweather.databinding.DailyForecastRowBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DailyAdapter: RecyclerView.Adapter<DailyAdapter.DailyViewHolder>() {
 
@@ -42,9 +46,15 @@ class DailyAdapter: RecyclerView.Adapter<DailyAdapter.DailyViewHolder>() {
 
                 tvMinTemp.text = forecast.main?.tempMin!!.toInt().toString() + "°"
                 tvMaxTemp.text = forecast.main.tempMax!!.toInt().toString() + "°"
-
                 val img = forecast.weather?.get(0)?.icon
-                lavWeather.setAnimation(getLottieSrc(img!!))
+                CoroutineScope(Dispatchers.Default).launch {
+
+                    val path = getLottieSrc(img!!)
+                    withContext(Dispatchers.Main) {
+                        lavWeather.setAnimation(path)
+                    }
+                }
+
             }
         }
 

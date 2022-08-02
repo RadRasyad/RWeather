@@ -21,7 +21,6 @@
         android:theme="@style/Theme.RWeather.Starting"
         tools:targetApi="31">
         <activity
-            android:icon="@drawable/ic_rweather_icon"
             android:name=".MainActivity"
             android:theme="@style/Theme.RWeather.Starting"
             android:exported="true">

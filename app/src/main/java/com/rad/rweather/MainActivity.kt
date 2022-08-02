@@ -46,6 +46,8 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private var mGPS: Boolean = false
+    private lateinit var mLocationManager: LocationManager
     private lateinit var binding: ActivityMainBinding
     private lateinit var factory: ViewModelFactory
     private lateinit var mainViewModel: MainViewModel
@@ -76,9 +78,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         isLocationPermissionGranted()
-        val mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        val mGPS = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        mGPS = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (mGPS) {
             getCurrentLocation()
         } else {
@@ -111,9 +113,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
+        mGPS = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (mGPS) {
+            getCurrentLocation()
+        } else {
+            Toast.makeText(this,"Please Turn On the GPS", Toast.LENGTH_LONG).show()
+        }
         getCurrentForecast()
         getDailyForecast()
     }
+
 
     private fun isLocationPermissionGranted(): Boolean {
         return if (ActivityCompat.checkSelfPermission(
@@ -141,10 +150,10 @@ class MainActivity : AppCompatActivity() {
     private fun getCurrentLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         val request = LocationRequest.create().apply {
-            interval = 100
-            fastestInterval = 50
+            interval = 10000
+            fastestInterval = 5000
             priority = Priority.PRIORITY_HIGH_ACCURACY
-            maxWaitTime = 100
+            maxWaitTime = 10000
         }
         val permission = ContextCompat.checkSelfPermission(
             this, Manifest.permission.ACCESS_FINE_LOCATION
@@ -158,7 +167,7 @@ class MainActivity : AppCompatActivity() {
                         lon = location.longitude
                     }
                 }
-            }, null)
+            },  Looper.getMainLooper())
         }
     }
 

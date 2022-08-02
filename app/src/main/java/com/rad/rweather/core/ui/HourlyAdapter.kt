@@ -9,6 +9,10 @@ import com.rad.rweather.core.utils.DateFormatter
 import com.rad.rweather.core.utils.ForecastSort
 import com.rad.rweather.core.utils.getLottieSrc
 import com.rad.rweather.databinding.HourlyForecastRowBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HourlyAdapter: RecyclerView.Adapter<HourlyAdapter.DailyViewHolder>() {
 
@@ -41,9 +45,13 @@ class HourlyAdapter: RecyclerView.Adapter<HourlyAdapter.DailyViewHolder>() {
                 val date = forecast.dateText?.let { DateFormatter.getHour(it) }
                 tvHour.text = date
                 tvTemp.text = forecast.main?.temp?.toInt().toString() + "°"
-
                 val img = forecast.weather?.get(0)?.icon
-                lavWeather.setAnimation(getLottieSrc(img!!))
+                CoroutineScope(Dispatchers.Default).launch {
+                    val path = getLottieSrc(img!!)
+                    withContext(Dispatchers.Main) {
+                        lavWeather.setAnimation(path)
+                    }
+                }
             }
         }
 
