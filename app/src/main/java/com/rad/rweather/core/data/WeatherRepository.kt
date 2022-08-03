@@ -13,6 +13,8 @@ import com.rad.rweather.core.domain.repository.IWeatherRepository
 import com.rad.rweather.core.utils.AppExecutors
 import com.rad.rweather.core.utils.datamapper.MapperEntityToDomain
 import com.rad.rweather.core.utils.datamapper.MapperResponseToEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class WeatherRepository private constructor(
     private val remoteDataSource: RemoteDataSource,
@@ -34,50 +36,45 @@ class WeatherRepository private constructor(
             }
     }
 
-    override fun getForecast(lat: Double, lon: Double): LiveData<Resource<Forecast>> =
-        object : NetworkBoundResource<Forecast, ForecastResponse>(appExecutors) {
+    override fun getForecast(lat: Double, lon: Double): Flow<Resource<Forecast>> =
+        object : NetworkBoundResource<Forecast, ForecastResponse>() {
 
-            override fun loadFromDB(): LiveData<Forecast> {
-                val data = localDataSource.getForecast()
-                return Transformations.map(data) {
+            override fun loadFromDB(): Flow<Forecast> {
+                return localDataSource.getForecast().map {
                     MapperEntityToDomain.mapForecastEntityToDomain(it)
                 }
             }
 
             override fun shouldFetch(data: Forecast?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<ForecastResponse>> =
+            override suspend fun createCall(): Flow<ApiResponse<ForecastResponse>> =
                 remoteDataSource.getForecast(lat, lon)
 
-            override fun saveCallResult(data: ForecastResponse) {
+            override suspend fun saveCallResult(data: ForecastResponse) {
                 val forecast = MapperResponseToEntity.mapForecastResponseToEntity(data)
-
                 localDataSource.insertForecast(forecast)
             }
+        }.asFlow()
 
-        }.asLiveData()
+    override fun getCurrentForecast(lat: Double, lon: Double): Flow<Resource<CurrentWeather>> =
+        object : NetworkBoundResource<CurrentWeather, CurrentWeatherResponse>() {
 
-    override fun getCurrentForecast(lat: Double, lon: Double): LiveData<Resource<CurrentWeather>> =
-        object : NetworkBoundResource<CurrentWeather, CurrentWeatherResponse>(appExecutors) {
-
-            override fun loadFromDB(): LiveData<CurrentWeather> {
-                val data = localDataSource.getCurrentForecast()
-                return Transformations.map(data) {
+            override fun loadFromDB(): Flow<CurrentWeather> {
+                return localDataSource.getCurrentForecast().map {
                     MapperEntityToDomain.mapCurrentForecastEntityToDomain(it)
                 }
             }
 
             override fun shouldFetch(data: CurrentWeather?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<CurrentWeatherResponse>> =
+            override suspend fun createCall(): Flow<ApiResponse<CurrentWeatherResponse>> =
                 remoteDataSource.getCurrentForecast(lat, lon)
 
-            override fun saveCallResult(data: CurrentWeatherResponse) {
+            override suspend fun saveCallResult(data: CurrentWeatherResponse) {
                 val forecast = MapperResponseToEntity.mapCurrentForecastResponseToEntity(data)
 
                 localDataSource.insertCurrentForecast(forecast)
             }
-
-        }.asLiveData()
+        }.asFlow()
 
 }

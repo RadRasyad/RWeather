@@ -8,6 +8,11 @@ import com.rad.rweather.core.data.source.remote.network.ApiClient
 import com.rad.rweather.core.data.source.remote.response.forecast.ForecastResponse
 import com.rad.rweather.core.data.source.remote.network.ApiResponse
 import com.rad.rweather.core.data.source.remote.response.currentforecast.CurrentWeatherResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,30 +34,41 @@ class RemoteDataSource private constructor(private val service: ApiClient) {
     private val appID: String
         get() = BuildConfig.API_KEY
 
-    fun getForecast(lat: Double, lon: Double): LiveData<ApiResponse<ForecastResponse>> {
-        val resultData = MutableLiveData<ApiResponse<ForecastResponse>>()
+    suspend fun getForecast(lat: Double, lon: Double): Flow<ApiResponse<ForecastResponse>> {
 
-        service.getForecast(lat, lon, appID, units).enqueue(object :
-            Callback<ForecastResponse> {
-            override fun onResponse(
-                call: Call<ForecastResponse>,
-                response: Response<ForecastResponse>
-            ) {
-                val data = response.body()
-                resultData.value = if (data!=null) ApiResponse.Success(data) else ApiResponse.Empty
+        return flow {
+            try {
+                val response = service.getForecast(lat, lon, appID, units)
 
+                if (response.list?.isNotEmpty() == true) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
             }
-
-            override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
-                resultData.value = ApiResponse.Error(t.message.toString())
-                Log.d("Response Failed", t.message.toString())
-            }
-
-        })
-
-        return resultData
+        }.flowOn(Dispatchers.IO)
     }
 
+    suspend fun getCurrentForecast(lat: Double, lon: Double): Flow<ApiResponse<CurrentWeatherResponse>> {
+        return flow {
+            try {
+                val response = service.getCurrentForecast(lat, lon, appID, units)
+
+                if (response !=  null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    /*
     fun getCurrentForecast(lat: Double, lon: Double): LiveData<ApiResponse<CurrentWeatherResponse>> {
         val resultData = MutableLiveData<ApiResponse<CurrentWeatherResponse>>()
 
@@ -74,4 +90,6 @@ class RemoteDataSource private constructor(private val service: ApiClient) {
 
         return resultData
     }
+
+     */
 }

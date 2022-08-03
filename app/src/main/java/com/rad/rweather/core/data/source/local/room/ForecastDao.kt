@@ -7,19 +7,20 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.rad.rweather.core.data.source.local.entity.currentforecast.CurrentWeatherEntity
 import com.rad.rweather.core.data.source.local.entity.forecast.ForecastEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ForecastDao {
 
     @Query("SELECT * FROM forecast_entity")
-    fun getForecast(): LiveData<ForecastEntity>
+    fun getForecast(): Flow<ForecastEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertForecast(forecast: ForecastEntity)
+    suspend fun insertForecast(forecast: ForecastEntity)
 
     @Query("SELECT * FROM current_weather_entity")
-    fun getCurrentForecast(): LiveData<CurrentWeatherEntity>
+    fun getCurrentForecast(): Flow<CurrentWeatherEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCurrentForecast(forecast: CurrentWeatherEntity)
+    suspend fun insertCurrentForecast(forecast: CurrentWeatherEntity)
 }

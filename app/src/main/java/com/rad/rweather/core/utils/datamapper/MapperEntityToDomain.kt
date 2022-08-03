@@ -15,7 +15,7 @@ import com.rad.rweather.core.domain.model.forecast.*
 
 object MapperEntityToDomain {
 
-    fun mapForecastEntityToDomain(data: ForecastEntity?): Forecast? {
+    fun mapForecastEntityToDomain(data: ForecastEntity?): Forecast {
 
         return Forecast(
             city = data?.city?.let { mapCityEntityToCity(it) },
