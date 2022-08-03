@@ -15,26 +15,15 @@ import com.rad.rweather.core.utils.datamapper.MapperEntityToDomain
 import com.rad.rweather.core.utils.datamapper.MapperResponseToEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class WeatherRepository private constructor(
+@Singleton
+class WeatherRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
 ) : IWeatherRepository {
-
-    companion object {
-        @Volatile
-        private var instance: WeatherRepository? = null
-
-        fun getInstance(
-            remoteData: RemoteDataSource,
-            localData: LocalDataSource,
-            appExecutors: AppExecutors
-        ): WeatherRepository =
-            instance ?: synchronized(this) {
-                instance ?: WeatherRepository(remoteData, localData, appExecutors)
-            }
-    }
 
     override fun getForecast(lat: Double, lon: Double): Flow<Resource<Forecast>> =
         object : NetworkBoundResource<Forecast, ForecastResponse>() {

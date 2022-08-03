@@ -1,12 +1,15 @@
 package com.rad.rweather.core.data.source.local
 
-import androidx.lifecycle.LiveData
+
 import com.rad.rweather.core.data.source.local.entity.currentforecast.CurrentWeatherEntity
 import com.rad.rweather.core.data.source.local.entity.forecast.ForecastEntity
 import com.rad.rweather.core.data.source.local.room.ForecastDao
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class LocalDataSource private constructor(private val forecastDao: ForecastDao) {
+@Singleton
+class LocalDataSource @Inject constructor(private val forecastDao: ForecastDao) {
 
     companion object {
         private var instance: LocalDataSource? = null

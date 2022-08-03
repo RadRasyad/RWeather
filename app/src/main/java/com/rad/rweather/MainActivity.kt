@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -37,20 +38,15 @@ import com.rad.rweather.core.utils.DateFormatter
 import com.rad.rweather.core.utils.getLottieSrc
 import com.rad.rweather.core.utils.networkstatus.NetworkState
 import com.rad.rweather.core.utils.networkstatus.NetworkStatusTracker
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.*
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private var mGPS: Boolean = false
     private lateinit var mLocationManager: LocationManager
     private lateinit var binding: ActivityMainBinding
-    private lateinit var factory: ViewModelFactory
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
 
     private var hourlyAdapter = HourlyAdapter()
     private var dailyAdapter = DailyAdapter()
@@ -92,8 +88,6 @@ class MainActivity : AppCompatActivity() {
         hourlyAdapter = HourlyAdapter()
         dailyAdapter = DailyAdapter()
 
-        factory = ViewModelFactory.getInstance(this)
-        mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         getCurrentForecast()
         getDailyForecast()
 

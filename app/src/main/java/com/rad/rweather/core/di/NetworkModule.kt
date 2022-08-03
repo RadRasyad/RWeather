@@ -1,16 +1,22 @@
-package com.rad.rweather.core.data.source.remote.network
+package com.rad.rweather.core.di
 
+import com.rad.rweather.core.data.source.remote.network.ApiClient
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-object ApiConfig {
+@Module
+@InstallIn(SingletonComponent::class)
+class NetworkModule {
 
-    private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
-
-    private fun provideOkHttpClient(): OkHttpClient {
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .connectTimeout(120, TimeUnit.SECONDS)
@@ -18,11 +24,12 @@ object ApiConfig {
             .build()
     }
 
-    fun provideApiService(): ApiClient{
+    @Provides
+    fun provideApiService(client: OkHttpClient): ApiClient {
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl("https://api.openweathermap.org/data/2.5/")
             .addConverterFactory(GsonConverterFactory.create())
-            //.client(provideOkHttpClient())
+            //.client(client)
             .build()
         return retrofit.create(ApiClient::class.java)
     }
