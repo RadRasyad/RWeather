@@ -1,9 +1,6 @@
 package com.rad.rweather.core.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import com.rad.rweather.core.data.source.remote.network.ApiResponse
-import com.rad.rweather.core.utils.AppExecutors
 import kotlinx.coroutines.flow.*
 
 abstract class NetworkBoundResource<ResultType, RequestType> {

@@ -2,7 +2,6 @@ package com.rad.rweather.core.data.source.local.entity.forecast
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "main_weather_entity")
 data class MainWeatherEntity (

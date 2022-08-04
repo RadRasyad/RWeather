@@ -29,6 +29,7 @@ class NetworkModule {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org/data/2.5/")
             .addConverterFactory(GsonConverterFactory.create())
+                //log data from api & endpoint url
             //.client(client)
             .build()
         return retrofit.create(ApiClient::class.java)

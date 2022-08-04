@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.rad.rweather.core.data.source.local.entity.*
 import com.rad.rweather.core.data.source.local.entity.forecast.MainWeatherEntity
-import com.squareup.moshi.Json
 
 @Entity(tableName = "current_weather_entity")
 data class CurrentWeatherEntity(

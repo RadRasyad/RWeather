@@ -1,6 +1,5 @@
 package com.rad.rweather.core.data.source.local
 
-
 import com.rad.rweather.core.data.source.local.entity.currentforecast.CurrentWeatherEntity
 import com.rad.rweather.core.data.source.local.entity.forecast.ForecastEntity
 import com.rad.rweather.core.data.source.local.room.ForecastDao

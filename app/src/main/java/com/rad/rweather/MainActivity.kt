@@ -4,15 +4,11 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
@@ -21,23 +17,19 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.rad.rweather.core.data.Resource
-import com.rad.rweather.core.domain.model.CurrentLocation
 import com.rad.rweather.core.domain.model.currentforecast.CurrentWeather
-import com.rad.rweather.core.domain.model.forecast.Forecast
 import com.rad.rweather.core.ui.DailyAdapter
 import com.rad.rweather.core.ui.HourlyAdapter
 import com.rad.rweather.core.ui.NetworkStatusViewModel
-import com.rad.rweather.databinding.ActivityMainBinding
-import com.rad.rweather.core.ui.ViewModelFactory
 import com.rad.rweather.core.utils.DateFormatter
 import com.rad.rweather.core.utils.getLottieSrc
 import com.rad.rweather.core.utils.networkstatus.NetworkState
 import com.rad.rweather.core.utils.networkstatus.NetworkStatusTracker
+import com.rad.rweather.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -80,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         if (mGPS) {
             getCurrentLocation()
         } else {
-            Toast.makeText(this,"Please Turn On the GPS", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Please Turn On the GPS", Toast.LENGTH_LONG).show()
         }
 
         checkConnection()
@@ -111,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         if (mGPS) {
             getCurrentLocation()
         } else {
-            Toast.makeText(this,"Please Turn On the GPS", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Please Turn On the GPS", Toast.LENGTH_LONG).show()
         }
         getCurrentForecast()
         getDailyForecast()
@@ -161,13 +153,13 @@ class MainActivity : AppCompatActivity() {
                         lon = location.longitude
                     }
                 }
-            },  Looper.getMainLooper())
+            }, Looper.getMainLooper())
         }
     }
 
     private fun getCurrentForecast() {
         mainViewModel.currentForecast(lat, lon).observe(this) { forecast ->
-            if (forecast!=null) {
+            if (forecast != null) {
                 when (forecast) {
                     is Resource.Loading -> {
                         binding.constraint.visibility = View.VISIBLE
@@ -213,10 +205,18 @@ class MainActivity : AppCompatActivity() {
                         if (forecast.data?.list?.size != null) {
                             hourlyAdapter.setData(forecast.data.list)
                             dailyAdapter.setData(forecast.data.list)
-                            Snackbar.make(binding.root, forecast.message.toString(), Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(
+                                binding.root,
+                                forecast.message.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
                         } else {
                             binding.constraint.visibility = View.GONE
-                            Snackbar.make(binding.root, forecast.message.toString(), Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(
+                                binding.root,
+                                forecast.message.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
                         }
                     }
                 }
@@ -243,11 +243,14 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun checkConnection() {
         viewModel.state.observe(this) { state ->
-            when(state) {
-                NetworkState.Error -> Snackbar.make(binding.root, "Disconnected", Snackbar.LENGTH_LONG).show()
+            when (state) {
+                NetworkState.Error -> Snackbar.make(
+                    binding.root,
+                    "Disconnected",
+                    Snackbar.LENGTH_LONG
+                ).show()
                 else -> {}
             }
         }

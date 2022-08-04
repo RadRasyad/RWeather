@@ -1,6 +1,5 @@
 package com.rad.rweather.core.domain.repository
 
-import androidx.lifecycle.LiveData
 import com.rad.rweather.core.data.Resource
 import com.rad.rweather.core.domain.model.currentforecast.CurrentWeather
 import com.rad.rweather.core.domain.model.forecast.Forecast

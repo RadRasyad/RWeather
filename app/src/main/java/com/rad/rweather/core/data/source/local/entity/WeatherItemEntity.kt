@@ -1,6 +1,5 @@
 package com.rad.rweather.core.data.source.local.entity
 
-
 import androidx.room.Entity
 import com.squareup.moshi.Json
 
